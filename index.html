@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VeriLens — Misinformation & Scam Spotter</title>
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <header class="topbar">
+    <label class="sr-only" for="langSelect">Language</label>
+<select id="langSelect" aria-label="Language">
+  <option value="en">English</option>
+  <option value="ha">Hausa</option>
+  <option value="ar">العربية</option>
+</select>
+    <div class="container topbar__inner">
+      <div class="brand">
+        <span class="brand__badge" aria-hidden="true">VL</span>
+        <div>
+          <h1 class="brand__title">VeriLens</h1>
+          <p class="brand__subtitle">Digital Forensics &amp; Scam Spotter Lab</p>
+        </div>
+      </div>
+
+    <div class="hud" aria-label="Player progress">
+        <div class="hud__stat">
+          <span class="hud__label" data-i18n="score">Score</span>
+          <strong id="scoreValue" class="hud__value">0</strong>
+        </div>
+        <div class="hud__stat">
+          <span class="hud__label" data-i18n="streak">Streak</span>
+          <strong id="streakValue" class="hud__value">0</strong>
+        </div>
+        <div class="hud__stat hud__stat--rank">
+          <span class="hud__label" data-i18n="rank">Rank</span>
+          <strong id="rankValue" class="hud__value">Rookie Observer</strong>
+        </div>
+        <select id="langSelect" class="btn btn--secondary" aria-label="Select language">
+          <option value="en">English</option>
+          <option value="ha">Hausa</option>
+          <option value="ar">العربية</option>
+        </select>
+        <button id="openTriageBtn" class="btn btn--secondary" type="button" data-i18n="triageBtn">
+          60s Pre-Click Check
+        </button>
+        <button id="themeToggleBtn" class="btn btn--ghost" type="button" aria-label="Toggle color theme">
+          Light Mode
+        </button>
+      </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container workspace">
+    <section class="filter-bar" aria-label="Case filters">
+      <div id="categoryFilters" class="filter-pills" role="group" aria-label="Filter by threat category"></div>
+      <div class="case-counter">
+        Case <span id="caseIndexText">1</span> of <span id="caseTotalText">1</span>
+      </div>
+    </section>
+
+    <div class="lab-grid">
+      <!-- Left Column: Simulated Channel & Clickable Red Flags -->
+      <section class="card evidence-panel" aria-labelledby="caseTitle">
+        <div class="evidence-panel__header">
+          <div>
+            <span id="caseCategoryTag" class="pill">Category</span>
+            <span id="caseDifficultyTag" class="pill pill--muted">Difficulty</span>
+          </div>
+          <span id="caseChannelTag" class="channel-label">Channel</span>
+        </div>
+
+        <h2 id="caseTitle" class="case-title">Loading scenario...</h2>
+        <p class="helper-text">
+          Click highlighted or suspicious phrases in the message/post to pin <strong>Red Flag</strong> evidence tags, or use a <strong>Forensic Lens</strong> on the right.
+        </p>
+
+        <div id="deviceFrame" class="device-frame">
+          <div class="device-frame__meta">
+            <div>
+              <strong>Sender / Source:</strong> <span id="senderDisplay"></span>
+            </div>
+            <span id="caseTimestamp" class="muted"></span>
+          </div>
+          <div id="senderHeaderBar" class="header-xray hidden"></div>
+          <div id="messageBody" class="message-body"></div>
+        </div>
+
+        <div class="flag-tray">
+          <div class="flag-tray__top">
+            <span>Evidence Pinned: <strong id="flaggedCount">0</strong> / <strong id="totalFlagsCount">0</strong> red flags</span>
+            <button id="clearFlagsBtn" class="link-btn" type="button">Clear Pins</button>
+          </div>
+          <div id="pinnedEvidenceList" class="evidence-chips"></div>
+        </div>
+      </section>
+
+      <!-- Right Column: Forensic Lenses & Verdict Controls -->
+      <aside class="inspector-column">
+        <section class="card" aria-label="Forensic inspection lenses">
+          <h3 class="card__heading">Forensic X-Ray Lenses</h3>
+          <p class="card__desc">Activate a lens to inspect hidden signals before deciding.</p>
+
+          <div class="lens-grid">
+            <button class="lens-btn" data-lens="sender" type="button">
+              <span class="lens-btn__name">Sender &amp; Header</span>
+              <span class="lens-btn__hint">Check origin &amp; spoofed IDs</span>
+            </button>
+            <button class="lens-btn" data-lens="url" type="button">
+              <span class="lens-btn__name">Link &amp; Domain</span>
+              <span class="lens-btn__hint">Inspect URL anatomy</span>
+            </button>
+            <button class="lens-btn" data-lens="urgency" type="button">
+              <span class="lens-btn__name">Urgency &amp; Tone</span>
+              <span class="lens-btn__hint">Spot panic or greed hooks</span>
+            </button>
+            <button class="lens-btn" data-lens="metadata" type="button">
+              <span class="lens-btn__name">Source &amp; Context</span>
+              <span class="lens-btn__hint">Verify dates &amp; claims</span>
+            </button>
+          </div>
+
+          <div id="lensOutput" class="lens-output">
+            Select a forensic lens above to inspect technical and contextual clues.
+          </div>
+        </section>
+
+        <section class="card verdict-card" aria-label="Submit your verdict">
+          <h3 class="card__heading">Your Verdict</h3>
+          <p class="card__desc">What is the safest, most accurate classification for this item?</p>
+
+          <div class="verdict-actions">
+            <button class="btn btn--danger" data-verdict="scam" type="button">Scam / Phishing</button>
+            <button class="btn btn--warning" data-verdict="misinformation" type="button">False / Misleading</button>
+            <button class="btn btn--success" data-verdict="legitimate" type="button">Safe / Legitimate</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- Debrief Drawer / Panel -->
+    <section id="debriefPanel" class="card debrief hidden" aria-live="polite">
+      <div class="debrief__head">
+        <div>
+          <span id="debriefBadge" class="pill">Result</span>
+          <h3 id="debriefTitle" class="debrief__title">Debrief</h3>
+        </div>
+        <button id="nextCaseBtn" class="btn btn--primary" type="button">Next Case →</button>
+      </div>
+
+      <p id="debriefSummary" class="debrief__summary"></p>
+
+      <div id="debriefClues" class="debrief__clues"></div>
+
+      <div class="defense-box">
+        <strong>Real-World Defense Action:</strong>
+        <p id="defenseTipText"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 60-Second Pre-Click Triage Modal -->
+  <div id="triageModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="triageTitle">
+    <div class="modal__backdrop" id="closeTriageBackdrop"></div>
+    <div class="modal__card">
+      <div class="modal__header">
+        <h2 id="triageTitle">60-Second Pre-Click Triage</h2>
+        <button id="closeTriageBtn" class="btn btn--ghost" type="button" aria-label="Close modal">✕</button>
+      </div>
+      <p class="card__desc">Answer these quick checks about a real message or link you just received:</p>
+      <div id="triageQuestions" class="triage-list"></div>
+      <div id="triageResult" class="triage-result"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
